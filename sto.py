@@ -3,7 +3,7 @@ import requests
 import json
 
 class Data():
-    def getPrice(ticker):
+    def getData(ticker):
         #Get stock data for a ticker symbol
         #url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' + ticker + '&outputsize=full&apikey=7ZET74D05LNJ0FOF'
         url =  'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo'
@@ -66,37 +66,37 @@ class SI():
         stock_df['RSI'] = rsi
         return stock_df
     
-from ibm_watson import NaturalLanguageUnderstandingV1
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
-
-class sentimentAnalysis():
-
-    def analyze_sentiment(stock_df):
-        api_key = 'your_ibm_watson_api_key'
-        url = 'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/your_instance_id'
-
-        authenticator = IAMAuthenticator(api_key)
-        natural_language_understanding = NaturalLanguageUnderstandingV1
-        version='2021-08-01',
-        authenticator=authenticator
-
-
-        natural_language_understanding.set_service_url(url)
-
-        sentiment_score = []
-
-        for price in stock_df:
-            try:
-                sentiment = natural_language_understanding.analyze(
-                    text=str(price),
-                    features=Features(sentiment=SentimentOptions())).get_result()
-                sentiment_score.append(sentiment['sentiment']['document']['score'])
-            except:
-                sentiment_score.append(0)
-        
-        stock_df['sentiment'] = sentiment_score
-        return stock_df
+#from ibm_watson import NaturalLanguageUnderstandingV1
+#from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+#from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
+#
+#class sentimentAnalysis():
+#
+#    def analyze_sentiment(stock_df):
+#        api_key = 'your_ibm_watson_api_key'
+#        url = 'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/your_instance_id'
+#
+#        authenticator = IAMAuthenticator(api_key)
+#        natural_language_understanding = NaturalLanguageUnderstandingV1
+#        version='2021-08-01',
+#        authenticator=authenticator
+#
+#
+#        natural_language_understanding.set_service_url(url)
+#
+#        sentiment_score = []
+#
+#        for price in stock_df:
+#            try:
+#                sentiment = natural_language_understanding.analyze(
+#                    text=str(price),
+#                    features=Features(sentiment=SentimentOptions())).get_result()
+#                sentiment_score.append(sentiment['sentiment']['document']['score'])
+#            except:
+#                sentiment_score.append(0)
+#        
+#        stock_df['sentiment'] = sentiment_score
+#        return stock_df
 
 import torch
 import torch.nn as nn
@@ -158,21 +158,60 @@ class StockPricePredictor:
         outputs = self.model(x)
         return outputs.detach().numpy()
 
-stock_data = pd.read_csv('your_stock_data.csv')
-stock_data = stock_data.dropna()
+#stock_data = pd.read_csv('your_stock_data.csv')
+#stock_data = stock_data.dropna()
+#
+## Create a train-test split
+#train_size = int(len(stock_data) * 0.8)
+#train_data, test_data = stock_data[0:train_size], stock_data[train_size:]
+#
+#model = StockPricePredictor(n_timesteps=50, n_features=1)
+#model.fit(train_data)
+#predictions = model.predict(test_data)
+#
+## Inverse transform the predictions to obtain the original scale
+#predictions = scaler.inverse_transform(predictions)
+#test_data = scaler.inverse_transform(test_data.values)
+#
+## Calculate the root mean squared error
+#rmse = np.sqrt(mean_squared_error(test_data, predictions))
+#print('Root Mean Squared Error:', rmse)
 
-# Create a train-test split
-train_size = int(len(stock_data) * 0.8)
-train_data, test_data = stock_data[0:train_size], stock_data[train_size:]
+#from textblob import TextBlob
+#
+#class sentimentAnalysis():
+#
+#    @staticmethod
+#    def analyze_sentiment(stock_df):
+#        sentiment_score = []
+#
+#        for i in range(len(stock_df)):
+#            sentiment = TextBlob(str(stock_df.iloc[i]['close'])).sentiment.polarity
+#            sentiment_score.append(sentiment)
+#        
+#        stock_df['Sentiment Score'] = sentiment_score
+#        return stock_df
+import requests
+import time
+class AI:
+    def SA(ticker):
+        # Your Alpha Vantage API Key
+        api_key = '7ZET74D05LNJ0FOF'
 
-model = StockPricePredictor(n_timesteps=50, n_features=1)
-model.fit(train_data)
-predictions = model.predict(test_data)
+        # Define the function and parameters
+        function = 'SENTIMENTINDEXT'
+        market = 'US'
+        interval = 'monthly' # Data interval, monthly or daily
+        #api_url = f'https://www.alphavantage.co/query?function={function}&symbol={ticker}&market={market}&interval={interval}&apikey={api_key}'
+        api_url = 'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=AAPL&apikey=demo'
 
-# Inverse transform the predictions to obtain the original scale
-predictions = scaler.inverse_transform(predictions)
-test_data = scaler.inverse_transform(test_data.values)
+        # Send the GET request and parse the response
+        response = requests.get(api_url)
+        data = response.json()
 
-# Calculate the root mean squared error
-rmse = np.sqrt(mean_squared_error(test_data, predictions))
-print('Root Mean Squared Error:', rmse)
+        # Extract the sentiment data
+        sentiment_data = data['Time Series Sentiment Index']
+
+        # Print the sentiment data
+        for date, sentiment in sentiment_data.items():
+            print(f'Date: {date}, Sentiment Score: {sentiment["sentiment_score"]}')
