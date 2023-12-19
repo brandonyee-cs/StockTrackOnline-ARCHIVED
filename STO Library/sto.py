@@ -93,14 +93,7 @@ class SI():
 
 class AI:
     def SA(ticker):
-        # Your Alpha Vantage API Key
-        api_key = '7ZET74D05LNJ0FOF'
-
-        # Define the function and parameters
-        function = 'SENTIMENTINDEXT'
-        market = 'US'
-        interval = 'monthly' # Data interval, monthly or daily
-        #api_url = f'https://www.alphavantage.co/query?function={function}&symbol={ticker}&market={market}&interval={interval}&apikey={api_key}'
+        #api_url = f'https://www.alphavantage.co/query?function=daily&symbol={ticker}&market=US&interval={interval}&apikey=7ZET74D05LNJ0FOF'
         api_url = 'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=AAPL&apikey=demo'
 
         # Send the GET request and parse the response
