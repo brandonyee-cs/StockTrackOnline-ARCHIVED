@@ -1,6 +1,6 @@
-> Made by Brandon Yee.
+> Made by Brandon Yee | brandonyee.nyc@gmail.com | [LinkedIn](https://www.linkedin.com/in/brandon-yee-0b335a284/)
 
-## **StockTrackOnline**
+## **StockTrackOnline | WORK IN PROGRESS** 
 
 ## Introduction
 
