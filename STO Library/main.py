@@ -1,6 +1,4 @@
-from sto import Data
-from sto import SI
-from sto import AI
+from sto import Data; from sto import SI; from sto import AI
 
 #ticker = input("Enter stock ticker: ")
 #window = int(input("Enter window: "))
