@@ -1,4 +1,8 @@
-import pandas as pd; import time; import requests; import json
+import pandas as pd
+import time
+import requests
+import json
+import matplotlib.pyplot as plt
 
 class Data():
 
@@ -82,3 +86,19 @@ class AI:
         data = response.json() #Send the GET request and parse the response
         sentiment_data = data['Time Series Sentiment Index'] #Extract the sentiment data
         for date, sentiment in sentiment_data.items(): print(f'Date: {date}, Sentiment Score: {sentiment["sentiment_score"]}')
+
+    def get_news(self, ticker):
+        api_url = f'https://newsapi.org/v2/everything?q={ticker}&apiKey=your_newsapi_key'
+        response = requests.get(api_url)
+        articles = response.json()['articles']
+        for article in articles:
+            print(f'Title: {article["title"]}, URL: {article["url"]}')
+
+class GraphShow(Data):
+    def plot_close(self, stock_df):
+        plt.figure(figsize=(14,7))
+        plt.plot(stock_df['Close'])
+        plt.title('Closing Price Over Time')
+        plt.xlabel('Date')
+        plt.ylabel('Price')
+        plt.show()
