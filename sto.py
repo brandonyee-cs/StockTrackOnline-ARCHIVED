@@ -2,6 +2,7 @@ import time
 import config
 import json
 import requests
+import yfinance as yf
 import pandas as pd
 import numpy as np
 import torch
@@ -17,7 +18,7 @@ class df:
         self.vantagekey = config.vantagekey
 
     def getData(ticker): #Get stock data for a ticker symbol
-        url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' + ticker + '&outputsize=full&apikey=7ZET74D05LNJ0FOF'
+        url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=7ZET74D05LNJ0FOF'
         response = requests.get(url) #url =  'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo'
         if response.status_code == 200:
             data = json.loads(response.text)
@@ -77,6 +78,50 @@ class stockAnalysis(df):
         self.stock_df['LBB'] = self.stock_df['SMA'] - k * self.stock_df['RSD']
         
         return self.stock_df #Calculate the rolling mean (SMA), rolling standard deviation (RSD), Upper Bollinger Band (UBB), and Lower Bollinger Band (LBB)
+
+    def MACD(self, short_window=12, long_window=26):
+        self.stock_df['short_mavg'] = self.stock_df['close'].ewm(span=short_window, adjust=False).mean()
+        self.stock_df['long_mavg'] = self.stock_df['close'].ewm(span=long_window, adjust=False).mean()
+        self.stock_df['MACD'] = self.stock_df['short_mavg'] - self.stock_df['long_mavg']
+        self.stock_df['signal_line'] = self.stock_df['MACD'].ewm(span=9, adjust=False).mean()
+        return self.stock_df
+    
+    def stochastic_oscillator(self, window=14):
+        self.stock_df['low_min'] = self.stock_df['low'].rolling(window).min()
+        self.stock_df['high_max'] = self.stock_df['high'].rolling(window).max()
+        self.stock_df['k'] = 100 * ((self.stock_df['close'] - self.stock_df['low_min']) / (self.stock_df['high_max'] - self.stock_df['low_min']))
+        return self.stock_df
+    
+    def OBV(self):
+        self.stock_df['daily_return'] = self.stock_df['close'].diff()
+        self.stock_df['direction'] = np.where(self.stock_df['daily_return'] > 0, 1, -1)
+        self.stock_df['direction'][0] = 0
+        self.stock_df['vol_adj'] = self.stock_df['volume'] * self.stock_df['direction']
+        self.stock_df['OBV'] = self.stock_df['vol_adj'].cumsum()
+        return self.stock_df
+    
+class stockscreener(df):
+    def __init__(self) -> None:
+        super().__init__()
+    
+    def stock_screener(self, market_cap_min=None, market_cap_max=None, pe_min=None, pe_max=None):
+        # Fetch the data
+        data = yf.download(self.ticker, period='1d')
+
+        # Filter the stock
+        info = yf.Ticker(self.ticker).info
+        market_cap = info['marketCap']
+        pe_ratio = info['trailingPE']
+        if market_cap_min is not None and market_cap < market_cap_min:
+            error = True
+        if market_cap_max is not None and market_cap > market_cap_max:
+            error = True
+        if pe_min is not None and pe_ratio < pe_min:
+            error = True
+        if pe_max is not None and pe_ratio > pe_max:
+            error = True
+        
+        return info if error != True else 'ERROR'
 
 class publicSentiment(df):
     def __init__(self) -> None:
@@ -168,6 +213,20 @@ class LSTM(nn.Module):
         actual_predictions = scaler.inverse_transform(np.array(test_inputs[train_window:] ).reshape(-1, 1))
         self.test = test
         self.predictions = actual_predictions
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.model = LSTM(train_window, model.hidden_layer_size, 1, 1)
+    
+    def calculate_loss(self):
+        criterion = nn.MSELoss()
+        (self.model).eval()
+        total_loss = 0.0
+        with torch.no_grad():
+            for inputs, targets in (self.dataloader):
+                inputs, targets = inputs.to(self.device), targets.to(self.device)
+                outputs = self.model(inputs)
+                loss = criterion(outputs, targets)
+                total_loss += loss.item()
+        return total_loss / len(self.dataloader)
 
 class graphShow(LSTM):
     def __init__(self):

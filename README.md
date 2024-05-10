@@ -6,8 +6,6 @@ StockTrackOnline (STO) is a web application designed for new investors seeking h
 
 ## Features
 
-## Features
-
 - **Easy Access to Information**: STO aims to be your go-to platform for all investment-related information, excluding news. We offer data typically available only through premium services.
 
 - **AI-Based Indicators and Projections**: STO employs multiple Machine Learning models to generate reliable projections for various indicators and share prices.
