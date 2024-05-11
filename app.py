@@ -1,22 +1,45 @@
 from flask import Flask, render_template, request
-from sto import df, stockAnalysis, publicSentiment, LSTM, graphShow # Import your classes from sto.py
+from sto import df, publicSentiment, LSTM, graphShow, stockAnalysis # Import your classes from sto.py
 
 app = Flask(__name__)
 
-@app.route('/publicsentiment', methods=['POST'] )
-def publicsentiment():
-    ticker = request.form['ticker']
-    ps = df(ticker); ps = publicSentiment()
-    sentiment = ps.SA(); news = ps.get_news()
-    return sentiment, news
-
-@app.route('/stockanalysis', methods=['POST'])
+@app.route('/getstockanalysis', methods=['POST'])
 def stockanalysis():
     ticker = request.form['ticker']
-    sa = df(ticker) 
-    sa = stockAnalysis(df)
-    stock_df = sa.EMA(); stock_df = sa.SMA(); stock_df = sa.RSI(); stock_df = sa.BOLLINGER_BANDS()
+    sa = stockAnalysis(ticker)
+    sa.add_conventional_indicators(); sa.quickedit()
+    stock_df = sa.getstock_df()
     return stock_df
+
+@app.route('/plot', methods=['POST'])
+def standaredgraphshow():
+    ticker = request.form['ticker']
+    graph = df(ticker); graph = graphShow()
+    plot = graph.plot_close()
+    return plot
+
+@app.route('/getstockscreener', methods=['POST'])
+def stockscreener():
+    ticker = request.form['ticker']
+    sa = stockAnalysis(ticker)
+    info = sa.stock_screener()
+    return info
+
+
+@app.route('/getpublicsentiment', methods=['POST'] )
+def publicsentiment():
+    ticker = request.form['ticker']
+    ps = publicSentiment()
+    sentiment = ps.SA()
+    return sentiment
+
+@app.route('/getnews', methods=['POST'])
+def news():
+    ticker = request.form['ticker']
+    ps = publicSentiment()
+    news = ps.get_news()
+    return news
+
 
 @app.route('/lstmplot', methods=['POST'])
 def lstmgraphshow():
@@ -24,13 +47,6 @@ def lstmgraphshow():
     graph = df(ticker); graph = LSTM()
     graph.forward(); graph.processdata()
     graph = graphShow(); plot = graph.plot_predictions()
-    return plot
-
-@app.route('/plot', methods=['POST'])
-def standaredgraphshow():
-    ticker = request.form['ticker']
-    graph = df(ticker); graph = graphShow()
-    plot = graph.plot_close()
     return plot
 
 @app.route('/')

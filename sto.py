@@ -40,57 +40,49 @@ class df:
         else: print("Failed to get data"); return None
 
 class stockAnalysis(df):
-    def __init__(self, window) -> None:
-        super().__init__()
+    def __init__(self, window, ticker) -> None:
+        super().__init__(ticker)
         self.window = window
 
+    def add_conventional_indicators(self):
+        info = yf.Ticker(self.ticker).info
+        self.stock_df['PE_ratio'] = info['trailingPE']
+        self.stock_df['EPS'] = info['trailingEps']
+        
     def EMA(self):
-
         if not(window): window = 10
         self.stock_df['EMA'] = self.stock_df['close'].ewm(span=self.window).mean()
-        return self.stock_df #Calculate the EMA using the pandas ewm function
 
     def SMA(self): 
-
         self.stock_df['SMA'] = self.stock_df['close'].rolling(window=self.window).mean()
-        return self.stock_df #Calculate the SMA using the pandas rolling function
 
     def RSI(self): 
-
         delta = self.stock_df['close'].diff()
         gain = delta.where(delta > 0, 0)
         loss = -delta.where(delta < 0, 0) #Calculate the RSI using the pandas rolling function
-
         loss_plus_1 = loss + 1
         avg_gain = gain.rolling(window=self.window).mean()
         avg_loss = loss.rolling(window=self.window).mean()
         rs = avg_gain / avg_loss; rsi = 100 - (100 / (1 + rs))
         self.stock_df['RSI'] = rsi
-        
-        return self.stock_df #Prevent division by zero
-    
+            
     def BOLLINGER_BANDS(self):
-
         if not(window) or not(k): window = 20; k = 2
         self.stock_df['SMA'] = self.stock_df['close'].rolling(window=window).mean()
         self.stock_df['RSD'] = self.stock_df['close'].rolling(window=window).std()
         self.stock_df['UBB'] = self.stock_df['SMA'] + k * self.stock_df['RSD']
         self.stock_df['LBB'] = self.stock_df['SMA'] - k * self.stock_df['RSD']
         
-        return self.stock_df #Calculate the rolling mean (SMA), rolling standard deviation (RSD), Upper Bollinger Band (UBB), and Lower Bollinger Band (LBB)
-
     def MACD(self, short_window=12, long_window=26):
         self.stock_df['short_mavg'] = self.stock_df['close'].ewm(span=short_window, adjust=False).mean()
         self.stock_df['long_mavg'] = self.stock_df['close'].ewm(span=long_window, adjust=False).mean()
         self.stock_df['MACD'] = self.stock_df['short_mavg'] - self.stock_df['long_mavg']
         self.stock_df['signal_line'] = self.stock_df['MACD'].ewm(span=9, adjust=False).mean()
-        return self.stock_df
     
     def stochastic_oscillator(self, window=14):
         self.stock_df['low_min'] = self.stock_df['low'].rolling(window).min()
         self.stock_df['high_max'] = self.stock_df['high'].rolling(window).max()
         self.stock_df['k'] = 100 * ((self.stock_df['close'] - self.stock_df['low_min']) / (self.stock_df['high_max'] - self.stock_df['low_min']))
-        return self.stock_df
     
     def OBV(self):
         self.stock_df['daily_return'] = self.stock_df['close'].diff()
@@ -98,17 +90,21 @@ class stockAnalysis(df):
         self.stock_df['direction'][0] = 0
         self.stock_df['vol_adj'] = self.stock_df['volume'] * self.stock_df['direction']
         self.stock_df['OBV'] = self.stock_df['vol_adj'].cumsum()
+
+    def quickedit(self):
+        stockAnalysis.EMA()
+        stockAnalysis.SMA()
+        stockAnalysis.RSI()
+        stockAnalysis.BOLLINGER_BANDS()
+        stockAnalysis.MACD()
+        stockAnalysis.stochastic_oscillator()
+        stockAnalysis.OBV()
+    
+    def getstock_df(self):
         return self.stock_df
     
-class stockscreener(df):
-    def __init__(self) -> None:
-        super().__init__()
-    
     def stock_screener(self, market_cap_min=None, market_cap_max=None, pe_min=None, pe_max=None):
-        # Fetch the data
         data = yf.download(self.ticker, period='1d')
-
-        # Filter the stock
         info = yf.Ticker(self.ticker).info
         market_cap = info['marketCap']
         pe_ratio = info['trailingPE']
@@ -124,8 +120,8 @@ class stockscreener(df):
         return info if error != True else 'ERROR'
 
 class publicSentiment(df):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, ticker) -> None:
+        super().__init__(ticker)
         self.interval = 50
 
     def SA(self):
@@ -144,9 +140,10 @@ class publicSentiment(df):
 
 
 
-class LSTM(nn.Module):
-    def initialize(self, input_size=1, hidden_layer_size=50, output_size=1):
-        super().__init__()
+class LSTM(nn.Module, df):
+    def __init__(self, input_size=1, hidden_layer_size=50, output_size=1, ticker):
+        nn.Module.__init__()
+        df.__init__(ticker)
         self.hidden_layer_size = hidden_layer_size
 
         self.lstm = nn.LSTM(input_size, hidden_layer_size)
@@ -156,14 +153,14 @@ class LSTM(nn.Module):
         self.hidden_cell = (torch.zeros(1,1,self.hidden_layer_size),
                             torch.zeros(1,1,self.hidden_layer_size))
 
-    def forward(self, input_seq):
+    def forward(self):
         lstm_out, self.hidden_cell = self.lstm((self.stock_df).view(len(self.stock_df) ,1, -1), self.hidden_cell)
         predictions = self.linear(lstm_out.view(len(self.stock_df), -1))
         self.predictions = predictions[-1]
 
     def processdata(self):
         # Load and preprocess the data
-        stock_data = pd.read_csv('stock_data.csv'); stock_data = stock_data['Close'].values; stock_data = stock_data.reshape(-1, 1)
+        stock_data = self.stock_df; stock_data = stock_data['Close'].values; stock_data = stock_data.reshape(-1, 1)
         scaler = MinMaxScaler(feature_range=(0, 1)); stock_data = scaler.fit_transform(stock_data)
 
         # Split the data into training and testing sets
