@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request
-from sto import df, publicSentiment, LSTM, graphShow, stockAnalysis # Import your classes from sto.py
+from STO.calendar import EconomicCalendar
+from STO.analysis import stockAnalysis
+from STO.graphs import graphShow
+from STO.news import news
+from STO.priceprediction import LSTM
 
 app = Flask(__name__)
 
+#Stock Analysis
 @app.route('/getstockanalysis', methods=['POST'])
 def stockanalysis():
     ticker = request.form['ticker']
@@ -11,13 +16,15 @@ def stockanalysis():
     stock_df = sa.getstock_df()
     return stock_df
 
+#First Interactive Graph
 @app.route('/plot', methods=['POST'])
 def standaredgraphshow():
     ticker = request.form['ticker']
-    graph = df(ticker); graph = graphShow()
+    graph = graphShow()
     plot = graph.plot_close()
     return plot
 
+#Stock Screener
 @app.route('/getstockscreener', methods=['POST'])
 def stockscreener():
     ticker = request.form['ticker']
@@ -25,29 +32,35 @@ def stockscreener():
     info = sa.stock_screener()
     return info
 
-
+#Sentiment Analysis
 @app.route('/getpublicsentiment', methods=['POST'] )
 def publicsentiment():
     ticker = request.form['ticker']
-    ps = publicSentiment()
+    ps = news(ticker)
     sentiment = ps.SA()
     return sentiment
 
+#News
 @app.route('/getnews', methods=['POST'])
-def news():
+def getnews():
     ticker = request.form['ticker']
-    ps = publicSentiment()
+    ps = news(ticker)
     news = ps.get_news()
     return news
 
-
+#LSTM Prediction
 @app.route('/lstmplot', methods=['POST'])
 def lstmgraphshow():
     ticker = request.form['ticker']
-    graph = df(ticker); graph = LSTM()
-    graph.forward(); graph.processdata()
-    graph = graphShow(); plot = graph.plot_predictions()
+    graph = graphShow(ticker)
+    plot = graph.plot_predictions()
     return plot
+
+@app.route('/getcalendar', methods=['POST'])
+def getcalendar():
+    ec = EconomicCalendar()
+    events = ec.get_upcoming_events()
+    return events
 
 @app.route('/')
 def index():
