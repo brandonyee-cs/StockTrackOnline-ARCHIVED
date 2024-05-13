@@ -44,7 +44,7 @@ Email: [brandonyee.nyc@gmail.com](mailto:brandonyee.nyc@gmail.com)
 
 ## Contributions
 
-Contributions are welcome, please submit a pull-request.
+Contributions are welcome; please submit a pull request.
 
 ## License
 
