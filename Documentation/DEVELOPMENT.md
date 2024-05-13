@@ -6,11 +6,11 @@
 
   - **News API**: Also used in the [`news`](STO/news.py) class in [STO/news.py](STO/news.py) to retrieve recent news articles about a given stock symbol.
 
-### Webscraping (Beautiful Soup):  
+### Web scraping (Beautiful Soup):  
 
-- **Company Profile**: The [`CompanyProfile`](STO/companyprofile.py) class in [STO/companyprofile.py](STO/companyprofile.py) uses webscraping to gather detailed information about a given company. This includes the company's name, industry, description, and more.
+- **Company Profile**: The [`CompanyProfile`](STO/companyprofile.py) class in [STO/companyprofile.py](STO/companyprofile.py) uses web scraping to gather detailed information about a given company. This includes the company's name, industry, description, and more.
 
-- **News**: The [`news`](STO/news.py) class in [STO/news.py](STO/news.py) uses webscraping to gather recent news articles about a given stock symbol. This information is then used to analyze the public sentiment towards the stock.
+- **News**: The [`news`](STO/news.py) class in [STO/news.py](STO/news.py) uses web scraping to gather recent news articles about a given stock symbol. This information is then used to analyze the public sentiment towards the stock.
 
 ### Libraries:
 
