@@ -1,5 +1,7 @@
 # StockTrackOnline
 
+[Development Information]() | [Documentation]()
+
 ## Introduction
 
 **StockTrackOnline is a Work-In-Progress**
@@ -27,24 +29,6 @@ StockTrackOnline (STO) is a web application designed for new investors seeking h
 - **News**: The news feature (currently in development) will provide the latest news related to a specific stock or the stock market in general. This can be useful for investors who want to stay updated on news that could impact their investments.
 
 - **Social Media Sentiment Analysis**: The upcoming sentiment analysis feature will analyze social media posts to gauge public sentiment towards specific stocks. This can be useful for investors who want to understand the market sentiment before making investment decisions.
-
-## Development:
-
-### APIs: 
-
-  - **Alpha Vantage API**: Used in the [`news`](STO/news.py) class in [STO/news.py](STO/news.py) to get the sentiment score for a given stock symbol. This score is based on the analysis of recent news articles and social media posts about the stock.
-
-  - **News API**: Also used in the [`news`](STO/news.py) class in [STO/news.py](STO/news.py) to retrieve recent news articles about a given stock symbol.
-
-### Webscraping (Beautiful Soup):  
-
-- **Company Profile**: The [`CompanyProfile`](STO/companyprofile.py) class in [STO/companyprofile.py](STO/companyprofile.py) uses webscraping to gather detailed information about a given company. This includes the company's name, industry, description, and more.
-
-- **News**: The [`news`](STO/news.py) class in [STO/news.py](STO/news.py) uses webscraping to gather recent news articles about a given stock symbol. This information is then used to analyze the public sentiment towards the stock.
-
-### Libraries:
-
-Requests, Pandas, Numpy, Pytorch, yFinance, Matplotlib, Flask, Sklearn, Beautiful Soup, PRAW, Tweepy, and TextBlob.
 
 ## Disclaimer
 
