@@ -11,11 +11,8 @@ class LSTM(nn.Module, df):
         nn.Module.__init__()
         df.__init__(ticker)
         self.hidden_layer_size = hidden_layer_size
-
         self.lstm = nn.LSTM(input_size, hidden_layer_size)
-
         self.linear = nn.Linear(hidden_layer_size, output_size)
-
         self.hidden_cell = (torch.zeros(1,1,self.hidden_layer_size),
                             torch.zeros(1,1,self.hidden_layer_size))
 

@@ -1,4 +1,4 @@
-import STO.config as config
+import csv
 import json
 import requests
 import pandas as pd
@@ -7,8 +7,13 @@ class df:
     def __init__(self, ticker) -> None:
         self.stock_df = df.getData(ticker)
         self.ticker = ticker
-        self.newskey = config.newskey
-        self.vantagekey = config.vantagekey
+
+        with open('/home/bdyee/config/config.csv', 'r') as f: #Replace with the path of your config file; refer to documentation for more information
+            reader = csv.reader(f)
+            self.config = []
+            for row in reader:
+                (self.config).append(row)
+
 
     def getData(ticker): #Get stock data for a ticker symbol
         url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=7ZET74D05LNJ0FOF'

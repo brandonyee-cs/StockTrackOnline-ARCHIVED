@@ -1,5 +1,6 @@
 from stock_df import df
 import requests
+import bs4 as beautifulsoup
 
 class  news(df):
     def __init__(self, ticker) -> None:
@@ -14,8 +15,11 @@ class  news(df):
         for date, sentiment in sentiment_data.items(): print(f'Date: {date}, Sentiment Score: {sentiment["sentiment_score"]}')
 
     def get_news(self):
-        api_url = f'https://newsapi.org/v2/everything?q={self.ticker}&apiKey={self.newskey}'
-        response = requests.get(api_url)
-        articles = response.json()['articles']
+        url = f'https://finance.yahoo.com/quote/{self.ticker}/news?p={self.ticker}'
+        response = requests.get(url)
+        soup = beautifulsoup(response.text, 'html.parser')
+        articles = soup.find_all('article')
         for article in articles:
-            print(f'Title: {article["title"]}, URL: {article["url"]}')
+            title = article.find('h3').text
+            url = article.find('a')['href']
+            print(f'Title: {title}, URL: {url}')
