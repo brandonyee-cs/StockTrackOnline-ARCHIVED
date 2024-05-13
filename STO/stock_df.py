@@ -5,19 +5,21 @@ import pandas as pd
 
 class df:
     def __init__(self, ticker) -> None:
-        self.stock_df = df.getData(ticker)
-        self.ticker = ticker
+        if ticker != None:
+            self.stock_df = df.getData(ticker)
+            self.ticker = ticker
 
         with open('/home/bdyee/config/config.csv', 'r') as f: #Replace with the path of your config file; refer to documentation for more information
             reader = csv.reader(f)
             self.config = []
             for row in reader:
                 (self.config).append(row)
+        self.vantagekey = self.config[0][1]
+        self.economiccalendarkey = self.config [1][1]
 
-
-    def getData(ticker): #Get stock data for a ticker symbol
-        url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=7ZET74D05LNJ0FOF'
-        response = requests.get(url) #url =  'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo'
+    def getData(self): #Get stock data for a ticker symbol
+        url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={self.ticker}&outputsize=full&apikey={self.vantagekey}'
+        response = requests.get(url) 
         if response.status_code == 200:
             data = json.loads(response.text)
             time_series = data['Time Series (Daily)']

@@ -8,23 +8,43 @@ StockTrackOnline (STO) is a web application designed for new investors seeking h
 
 ## Features
 
-- **Easy Access to Information**: STO aims to provide users with a one-stop platform for all investment-related information, excluding news. It offers data that is typically only available through premium services. This can be useful for investors who want to have all the necessary information at their fingertips without having to subscribe to multiple services.
+- **Comprehensive Investment Information**: STO is designed to be a comprehensive platform for all investment-related information, excluding news. It offers data that is typically only available through premium services. This includes detailed stock indicators, financial metrics, and forecasts, providing investors with a wealth of information at their fingertips without the need for multiple subscriptions.
 
-- **Stock Screener**: STO includes a stock screener that allows users to filter stocks based on certain criteria such as market capitalization and price-to-earnings (P/E) ratio. This can be useful for investors who want to narrow down their search to stocks that meet specific requirements.
+- **Stock Screener**: The stock screener feature in STO allows users to filter stocks based on a variety of criteria such as market capitalization, price-to-earnings (P/E) ratio, and more. This feature is designed to help investors narrow down their search to stocks that meet specific requirements, making the investment decision process more efficient.
 
-- **Standard Trading Indicators**: STO calculates various standard trading indicators such as Earnings Per Share (EPS) and Price to Earnings (P/E) ratio. These indicators can provide a basic view of the market and are a good starting point for investors who are new to stock trading.
+- **Standard and Advanced Trading Indicators**: STO calculates a wide range of trading indicators, both standard and advanced. Standard indicators such as Earnings Per Share (EPS) and Price to Earnings (P/E) ratio provide a basic view of the market, while advanced indicators like Relative Strength Index (RSI), Bollinger Bands, and others offer a more comprehensive view. These features cater to both novice and experienced investors, helping them make informed trading decisions.
 
-- **Advanced Trading Indicators**: STO calculates various advanced trading indicators such as Relative Strength Index (RSI), Bollinger Bands, and others. These indicators can provide a comprehensive view of the market and can be useful for more experienced investors who want to make more informed trading decisions.
+- **AI-Based Indicators and Projections**: Leveraging the power of Machine Learning, STO generates reliable projections for various indicators and share prices. This feature is designed for investors who want to utilize AI technology to predict future market trends, providing them with a competitive edge in the market.
 
-- **AI-Based Indicators and Projections**: STO employs multiple Machine Learning models to generate reliable projections for various indicators and share prices. This can be useful for investors who want to leverage the power of AI to predict future market trends.
+- **Interactive Graphs**: STO provides interactive graphs for various trading indicators, allowing users to visualize data in an intuitive way. This feature makes it easier for investors to identify trends and patterns, aiding in the analysis of a stock's performance over time.
 
-- **Interactive Graphs**: STO provides interactive graphs for various trading indicators. These graphs allow users to visualize the data in a more intuitive way, making it easier to identify trends and patterns. This can be useful for investors who want to analyze the performance of a stock over time.
+- **Company Profile**: The CompanyProfile feature provides detailed information about a company, including its financials and key metrics. This can be useful for investors who want to understand the fundamentals of a company before investing.
 
-- **Public Sentiment Analysis**: STO uses the Alpha Vantage API to get the sentiment score for a given stock symbol. This score is based on the analysis of recent news articles and social media posts about the stock. This can be useful for investors who want to understand the public sentiment towards a particular stock.
+- **Economic Calendar**: The economicCalendar feature provides information about upcoming economic events that could impact the stock market. This can be useful for investors who want to stay informed about market-moving events.
 
-- **News Retrieval**: STO can retrieve recent news articles about a given stock symbol using the News API. This can be useful for investors who want to stay updated with the latest news about the stocks they are interested in.
+- **Price Prediction**: The LSTM model in the priceprediction feature uses historical stock price data to predict future prices. This can be useful for investors who want to forecast potential price movements.
 
+- **News**: The news feature (currently in development) will provide the latest news related to a specific stock or the stock market in general. This can be useful for investors who want to stay updated on news that could impact their investments.
 
+- **Social Media Sentiment Analysis**: The upcoming sentiment analysis feature will analyze social media posts to gauge public sentiment towards specific stocks. This can be useful for investors who want to understand the market sentiment before making investment decisions.
+
+## Development:
+
+### APIs: 
+
+  - **Alpha Vantage API**: Used in the [`news`](STO/news.py) class in [STO/news.py](STO/news.py) to get the sentiment score for a given stock symbol. This score is based on the analysis of recent news articles and social media posts about the stock.
+
+  - **News API**: Also used in the [`news`](STO/news.py) class in [STO/news.py](STO/news.py) to retrieve recent news articles about a given stock symbol.
+
+### Webscraping (Beautiful Soup):  
+
+- **Company Profile**: The [`CompanyProfile`](STO/companyprofile.py) class in [STO/companyprofile.py](STO/companyprofile.py) uses webscraping to gather detailed information about a given company. This includes the company's name, industry, description, and more.
+
+- **News**: The [`news`](STO/news.py) class in [STO/news.py](STO/news.py) uses webscraping to gather recent news articles about a given stock symbol. This information is then used to analyze the public sentiment towards the stock.
+
+### Libraries:
+
+Requests, Pandas, Numpy, Pytorch, yFinance, Matplotlib, Flask, Sklearn, Beautiful Soup, PRAW, Tweepy, and TextBlob.
 
 ## Disclaimer
 

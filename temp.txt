@@ -1,5 +1,6 @@
 To Do:
 
+Configure twitter and reddit apis
 Add Other Info https://pypi.org/project/yfinance/
 https://saturncloud.io/blog/how-to-use-python-and-pandas-with-yahoo-finance-api/#:~:text=The%20API%20offers%20a%20range,data%20for%20analysis%20and%20modeling.
 TestCases
