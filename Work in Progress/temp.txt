@@ -1,0 +1,5 @@
+To Do:
+
+Finish Documentation
+Configure twitter and reddit apis
+TestCases

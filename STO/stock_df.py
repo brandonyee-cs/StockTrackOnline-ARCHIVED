@@ -2,18 +2,14 @@ import csv
 import json
 import requests
 import pandas as pd
+import config
 
 class df:
     def __init__(self, ticker) -> None:
         if ticker != None:
             self.stock_df = df.getData(ticker)
             self.ticker = ticker
-
-        with open('/home/bdyee/config/config.csv', 'r') as f: #Replace with the path of your config file; refer to documentation for more information
-            reader = csv.reader(f)
-            self.config = []
-            for row in reader:
-                (self.config).append(row)
+        self.config = config.config
         self.vantagekey = self.config[0][1]
         self.economiccalendarkey = self.config [1][1]
 
