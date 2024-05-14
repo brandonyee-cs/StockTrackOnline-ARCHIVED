@@ -1,9 +1,9 @@
-from stock_df import df
+from STO.stock_df import df
 import yfinance as yf
 import datetime
 import pandas as pd 
 
-class balancesheet(df):
+class financials(df):
     def __init__(self, ticker) -> None:
         super().__init__(ticker)
 

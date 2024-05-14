@@ -1,5 +1,5 @@
 # 
-from stock_df import df
+from STO.stock_df import df
 import numpy as np
 import torch
 import torch.nn as nn

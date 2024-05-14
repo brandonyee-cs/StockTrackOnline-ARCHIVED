@@ -1,4 +1,4 @@
-from stock_df import df
+from STO.stock_df import df
 import requests
 
 class EconomicCalendar(df):
