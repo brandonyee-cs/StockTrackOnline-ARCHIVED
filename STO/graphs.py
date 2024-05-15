@@ -1,4 +1,4 @@
-from priceprediction import LSTM
+from STO.priceprediction import LSTM
 import matplotlib.pyplot as plt
 
 class graphShow(LSTM):

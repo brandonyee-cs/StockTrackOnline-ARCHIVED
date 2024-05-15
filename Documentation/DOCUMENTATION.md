@@ -4,10 +4,14 @@
 ## Running Beta Services:
 Clone the Repository
 
+Change Directories into the Beta Directory
+```
+cd beta
+```
+
 Install Necessary Packages.
 ```
-chmod u+x setup.sh
-./setup.sh
+pip install -r dependancies.txt
 ```
 
 For this setup you need both an [Alpha Vantage API Key](https://www.alphavantage.co/), and a [Trading Economics API Key](https://tradingeconomics.com/).

@@ -1,39 +1,50 @@
-import unittest
 from STO.analysis import stockAnalysis
-from priceprediction import LSTM
-from companyprofile import CompanyProfile
-from calendar import economicCalendar
+from STO.calendar import EconomicCalendar
+from STO.companyprofile import CompanyProfile
+from STO.financials import financials
+from STO.graphs import graphShow
+from STO.news import news
 
-class TestFeatures(unittest.TestCase):
-    def setUp(self):
-        # Initialize the classes with test data
-        self.analysis = stockAnalysis('AAPL')
-        self.lstm = LSTM('AAPL')
-        self.profile = CompanyProfile('AAPL')
-        self.calendar = economicCalendar()
+class tests:
+    def __init__(self, ticker) -> None:
+        self.ticker = ticker
 
     def test_analysis(self):
-        # Test the analysis features
-        self.analysis.quickedit()
-        self.assertIsNotNone(self.analysis.getstock_df())
-
-    def test_lstm(self):
-        # Test the LSTM model
-        self.lstm.processdata()
-        self.assertIsNotNone(self.lstm.test)
-        self.assertIsNotNone(self.lstm.predictions)
-
-    def test_profile(self):
-        # Test the company profile feature
-        profile = self.profile.get_profile()
-        self.assertIsNotNone(profile)
+        analysis = stockAnalysis(self.ticker)
+        return self.assertIsNotNone(analysis.quickedit())
 
     def test_calendar(self):
-        # Test the economic calendar feature
-        events = self.calendar.get_upcoming_events()
-        self.assertIsNotNone(events)
+        calendar = EconomicCalendar()
+        return self.assertIsNotNone(calendar.get_upcoming_events())
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_companyprofile(self):
+        profile = CompanyProfile(self.ticker)
+        return self.assertIsNotNone(profile.get_profile())
 
-#REDO
+    def test_financials(self):
+        financial = financials(self.ticker)
+        return self.assertIsNotNone(financial.get_financials())
+
+    def test_LSTM(self):
+        graph = graphShow(self.ticker)
+        return self.assertIsNotNone(graph.LSMA())
+
+def run_tests(ticker):
+    testspassed = 0
+    if tests(ticker).test_analysis() == True: print("Analysis test passed"); testspassed += 1
+    else: print("Analysis test failed")
+    if tests(ticker).test_calendar() == True: print("Calendar test passed"); testspassed += 1
+    else: print("Calendar test failed")
+    if tests(ticker).test_companyprofile() == True: print("Company profile test passed"); testspassed += 1
+    else: print("Company profile test failed")
+    if tests(ticker).test_financials() == True: print("Financials test passed"); testspassed += 1
+    else: print("Financials test failed")
+    if tests(ticker).test_LSTM() == True: print("LSMA test passed"); testspassed += 1
+    else: print("LSTM test failed")
+    print(f"{testspassed}/5 tests passed")
+    
+def main():
+    input_ticker = input("Enter a ticker: ")
+    run_tests(input_ticker)
+
+main()

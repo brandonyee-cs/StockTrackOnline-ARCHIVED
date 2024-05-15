@@ -2,7 +2,7 @@ import csv
 import json
 import requests
 import pandas as pd
-import config
+import beta.config as config
 
 class df:
     def __init__(self, ticker) -> None:

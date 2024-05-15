@@ -24,7 +24,7 @@ StockTrackOnline (STO) is a web application designed for new investors seeking h
 
 - **Economic Calendar**: The economicCalendar feature provides information about upcoming economic events that could impact the stock market. This can be useful for investors who want to stay informed about market-moving events.
 
-- **Price Prediction**: The LSTM model in the priceprediction feature uses historical stock price data to predict future prices. This can be useful for investors who want to forecast potential price movements.
+- **Price Projections**: The LSTM model in the priceprediction feature uses historical stock price data to predict future prices. This can be useful for investors who want to forecast potential price movements.
 
 - **News**: The news feature (currently in development) will provide the latest news related to a specific stock or the stock market in general. This can be useful for investors who want to stay updated on news that could impact their investments.
 
