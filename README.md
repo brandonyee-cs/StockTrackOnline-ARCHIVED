@@ -1,6 +1,6 @@
 # StockTrackOnline
 
-[Development Information](https://github.com/brandonyee-cs/StockTrackOnline/blob/main/Documentation/DEVELOPMENT.md) | [Documentation](https://github.com/brandonyee-cs/StockTrackOnline/blob/main/Documentation/DOCUMENTATION.md)
+[Development Information](https://github.com/brandonyee-cs/StockTrackOnline/blob/main/Documentation/DEVELOPMENT.md) | [Documentation](https://github.com/brandonyee-cs/StockTrackOnline/blob/main/Documentation/DOCUMENTATION.md) | [New Features](https://github.com/brandonyee-cs/StockTrackOnline/blob/main/Documentation/NEWFEATURES.md)
 
 ## Introduction
 
