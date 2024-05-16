@@ -1,5 +1,14 @@
 import fidelity
+import requests
 
+
+class FidelityInformation:
+    def __init__(self, ticker, barwidth) -> None:
+        url = "https://fidelity-investments.p.rapidapi.com/symbols/get-historical-chart"
+        querystring = {"symbols":ticker,"barWidth":barwidth}
+        headers = {"X-RapidAPI-Key": "SIGN-UP-FOR-KEY", "X-RapidAPI-Host": "fidelity-investments.p.rapidapi.com"}
+
+''' Depricated
 class FidelityBrokerage:
     def __init__(self, username, password):
         self.client = fidelity.Client(username, password)
@@ -18,4 +27,5 @@ class FidelityBrokerage:
 
     def get_portfolio(self):
         return self.client.get_portfolio()
-
+'''
+#https://rapidapi.com/apidojo/api/fidelity-investments

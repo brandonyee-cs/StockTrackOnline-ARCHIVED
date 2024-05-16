@@ -136,11 +136,22 @@ class stockAnalysis(df):
     def quickedit(self):
         stockAnalysis.EMA()
         stockAnalysis.SMA()
+        stockAnalysis.VWAP()
         stockAnalysis.RSI()
+        stockAnalysis.ATR()
         stockAnalysis.BOLLINGER_BANDS()
         stockAnalysis.MACD()
         stockAnalysis.stochastic_oscillator()
         stockAnalysis.OBV()
+        stockAnalysis.fibonacci_retracement()
+        stockAnalysis.ichimoku_cloud()
+        stockAnalysis.pivot_points()
+        stockAnalysis.money_flow_index()
+        stockAnalysis.accumulation_distribution_line()
+        stockAnalysis.average_directional_index()
+        stockAnalysis.commodity_channel_index()
+        stockAnalysis.rate_of_change()
+        stockAnalysis.chaikin_oscillator()
     
     def getstock_df(self):
         return self.stock_df
@@ -159,4 +170,4 @@ class stockAnalysis(df):
         if pe_max is not None and pe_ratio > pe_max:
             error = True
         
-        return info if error != True else 'ERROR'
+        return info if error != True else None
