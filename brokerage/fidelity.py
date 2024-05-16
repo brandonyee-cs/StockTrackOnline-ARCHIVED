@@ -1,18 +1,21 @@
-import robin_stocks as rs
+import fidelity
 
-class rstrading:
-    def __init__(self, username, password):    
-        rs.login(username = username, password = password, expiresIn = 86400, by_sms = True) #True if using two factor authentication false is without
-    
-    def logout(self):
-        rs.logout()
+class FidelityBrokerage:
+    def __init__(self, username, password):
+        self.client = fidelity.Client(username, password)
 
-    def tradebyprice(self, symbol, ammountInDollars):
-        rs.orders.order_buy_fractional_by_price(symbol, ammountInDollars, timeInForce='gtc', extendedHours=False) 
-    
-    def tradebyshares(self, symbol, shares, pricelimit):
-        rs.orders.order_buy_fractional_by_quantity(symbol, shares, pricelimit, timeInForce='gtc', extendedHours=False)
+    def get_account_info(self):
+        return self.client.get_account_info()
 
-class options(rstrading):
-    def buyoptionslimit(self, positionEffect, creditOrDebit, price, symbol, quantity, expirationDate, strike):
-        rs.orders.order_buy_option_limit(positionEffect, creditOrDebit, price, symbol,quantity,expirationDate, strike, optionType='both', timeInForce='gtc')
+    def buy_stock(self, ticker, quantity):
+        return self.client.place_order(ticker, quantity, fidelity.OrderType.BUY)
+
+    def sell_stock(self, ticker, quantity):
+        return self.client.place_order(ticker, quantity, fidelity.OrderType.SELL)
+
+    def get_stock_price(self, ticker):
+        return self.client.get_price(ticker)
+
+    def get_portfolio(self):
+        return self.client.get_portfolio()
+

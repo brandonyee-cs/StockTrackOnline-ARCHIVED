@@ -1,1 +1,1 @@
-numpy pandas matplotlib sklearn torch nn-torch yfinance requests beautifulsoup4 tweepy textblob praw python-form flask
+numpy pandas matplotlib sklearn torch nn-torch yfinance requests beautifulsoup4 tweepy textblob praw python-form flask fidelity robin_stocks
